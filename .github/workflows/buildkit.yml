@@ -33,3 +33,4 @@ jobs:
           push: true
           tags: |
             philiplehmann/transmission:latest
+            philiplehmann/transmission:3.00
