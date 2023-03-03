@@ -3,7 +3,7 @@ RUN apt-get update && apt-get -y upgrade && apt-get -y install make cmake zlib1g
 
 FROM base as builder
 RUN apt-get install -y build-essential git python automake libtool netatalk libevent-openssl-2.1-7 \
-  && git clone --depth 1 --branch 4.0.0 --single-branch https://github.com/transmission/transmission Transmission \
+  && git clone --depth 1 --branch 4.0.1 --single-branch https://github.com/transmission/transmission Transmission \
   && cd Transmission \
   && git submodule update --init --recursive \
   && mkdir build && cd build \

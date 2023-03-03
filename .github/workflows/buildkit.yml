@@ -32,5 +32,5 @@ jobs:
           platforms: linux/arm64,linux/amd64
           push: true
           tags: |
-            philiplehmann/transmission:4.0.0
+            philiplehmann/transmission:4.0.1
             philiplehmann/transmission:latest
