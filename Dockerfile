@@ -3,7 +3,7 @@ RUN apt-get update && apt-get -y upgrade && apt-get -y install g++ make cmake zl
 
 FROM base as builder
 RUN apt-get install -y build-essential git python3 automake libtool libevent-openssl-2.1-7 \
-  && git clone --depth 1 --branch 4.0.4 --single-branch https://github.com/transmission/transmission Transmission \
+  && git clone --depth 1 --branch 4.0.5 --single-branch https://github.com/transmission/transmission Transmission \
   && cd Transmission \
   && git submodule update --init --recursive \
   && mkdir build && cd build \
