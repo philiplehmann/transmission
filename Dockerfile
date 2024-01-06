@@ -11,7 +11,7 @@ RUN apt-get install -y build-essential git python3 automake libtool libevent-ope
   && make
 
 FROM base
-ENV UID=1002
+ENV UID=1000
 COPY --from=builder /Transmission /Transmission
 RUN cd Transmission/build \
   && make install \
