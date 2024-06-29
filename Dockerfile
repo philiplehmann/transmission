@@ -1,26 +1,27 @@
-FROM bitnami/minideb:latest as base
-RUN apt-get update && apt-get -y upgrade && apt-get -y install g++ make cmake zlib1g-dev libssl-dev libcurl4-openssl-dev libevent-dev
+FROM bitnami/minideb:latest AS base
+RUN apt-get update && \
+    apt-get --yes upgrade && \
+    apt-get --yes install --no-install-recommends ca-certificates zlib1g-dev libssl-dev libcurl4-openssl-dev libevent-dev
 
-FROM base as builder
-RUN apt-get install -y build-essential git python3 automake libtool libevent-openssl-2.1-7 \
-  && git clone --depth 1 --branch 4.0.6 --single-branch https://github.com/transmission/transmission Transmission \
-  && cd Transmission \
-  && git submodule update --init --recursive \
-  && mkdir build && cd build \
-  && cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo .. \
-  && make
+FROM base AS builder
+RUN apt-get install --yes --no-install-recommends build-essential g++ make cmake git python3 automake libtool libevent-openssl-2.1-7 && \
+    git clone --depth 1 --branch 4.0.6 --single-branch https://github.com/transmission/transmission Transmission && \
+    cd Transmission && \
+    git submodule update --init --recursive && \
+    mkdir build && \
+    cd build && \
+    cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo .. &&  \
+    make && \
+    DESTDIR="/transmission" make install 
 
 FROM base
 ENV UID=1000
-COPY --from=builder /Transmission /Transmission
-RUN cd Transmission/build \
-  && make install \
-  && cd / && rm -rf /Transmission \
-  && apt-get -y remove make cmake && apt-get -y autoremove && apt-get -y clean
+ENV PORT=9091
+COPY --from=builder /transmission /transmission
 
 RUN useradd -ms /bin/bash -u $UID movies
 USER movies
 
-ENTRYPOINT ["/usr/local/bin/transmission-daemon", "--foreground", "--port=9091"]
+CMD ["/transmission/usr/local/bin/transmission-daemon", "--foreground", "--port=${PORT}"]
 
-EXPOSE 9091
+EXPOSE $PORT
