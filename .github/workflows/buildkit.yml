@@ -34,12 +34,22 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Login to harbor.riwi.dev registry
+        uses: docker/login-action@v3
+        with:
+          registry: harbor.riwi.dev
+          username: ${{ secrets.HARBOR_USERNAME }}
+          password: ${{ secrets.HARBOR_TOKEN }}
+
+
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
           context: .
           platforms: linux/arm64,linux/amd64
           push: true
+          cache-from: type=registry,ref=harbor.riwi.dev/philiplehmann/transmission:buildcache
+          cache-to: type=registry,ref=harbor.riwi.dev/philiplehmann/transmission:buildcache,mode=max,image-manifest=true
           tags: |
             philiplehmann/transmission:4.0.6
             philiplehmann/transmission:latest
