@@ -5,7 +5,7 @@ RUN apt-get update && \
 
 FROM base AS builder
 
-ARG TRANSMISSION_VERSION=4.0.6
+ARG TRANSMISSION_VERSION=4.1.1
 
 WORKDIR /build
 
