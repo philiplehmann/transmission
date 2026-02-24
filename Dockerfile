@@ -1,4 +1,4 @@
-FROM bitnami/minideb:latest AS base
+FROM debian:trixie-slim AS base
 RUN apt-get update && \
     apt-get --yes upgrade && \
     apt-get --yes install --no-install-recommends ca-certificates libcurl4 libevent-2.1-7
